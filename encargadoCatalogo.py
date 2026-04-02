@@ -3,8 +3,7 @@ from obraArte import ObraArte
 from usuario import Usuario
 
 class EncargadoCatalogo(Usuario):
-   
- 
+
     def __init__(
         self,
         id_usuario,
@@ -17,8 +16,8 @@ class EncargadoCatalogo(Usuario):
 
         # Llamamos al constructor del padre (Usuario)
         super().__init__(id_usuario, nombre, apellido, email, contrasena, rol="encargado_catalogo")
- 
- 
+
+
     #--- propiedades ───────────────────────────────────
     @property
     def catalogo(self):
@@ -38,7 +37,7 @@ class EncargadoCatalogo(Usuario):
         """Agrega una obra nueva al catálogo."""
         self.catalogo.registrar_obra(obra)
         print(f"Obra '{obra.titulo}' registrada correctamente.")
- 
+
     
     # Editar una obra existente ────────────────────────────────── 
     def editar_obra(self, id_obra, titulo=None, autor=None, periodo=None, estado=None):
