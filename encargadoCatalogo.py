@@ -3,10 +3,7 @@ from obraArte import ObraArte
 from usuario import Usuario
 
 class EncargadoCatalogo(Usuario):
-    """
-    Encargado de administrar el catálogo de obras del museo.
-    Hereda de Usuario.
-    """
+   
  
     def __init__(
         self,

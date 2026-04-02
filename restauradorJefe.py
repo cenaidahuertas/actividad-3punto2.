@@ -23,3 +23,4 @@ class RestauradorJefe():
 
     def ver_catalogo(self, catalogo):
         return catalogo.listar_obras()
+    
