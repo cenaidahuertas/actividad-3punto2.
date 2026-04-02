@@ -1,7 +1,6 @@
 from usuario import Usuario
 
 class Visitante(Usuario):
- 
     def __init__(
             self,
             id_usuario,
@@ -58,4 +57,4 @@ class Visitante(Usuario):
     def __str__(self):
         return f"Visitante: {self.nombre} {self.apellido} (Email: {self.email})"
     
-    
+
