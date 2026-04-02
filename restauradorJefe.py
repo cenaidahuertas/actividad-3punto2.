@@ -1,26 +1,76 @@
-class RestauradorJefe():
-    def __init__(self, id, nombre, clave):
-        super().__init__(id, nombre, "restaurador jefe", clave)
+from usuario import Usuario
 
-    def iniciar_restauracion(self, obra, restauracion):
-        obra.enviar_a_restauracion(restauracion)
+class RestauradorJefe(Usuario):
+    def __init__(
+            self,
+            id_usuario,
+            nombre,
+            apellido,
+            email,
+            contrasena) -> None:
 
-    def finalizar_restauracion(self, obra, fecha_fin):
-        if obra.restauraciones:
-            obra.restauraciones[-1].finalizar(fecha_fin)
-            obra.finalizar_restauracion(fecha_fin)
+        # Llamamos al constructor del padre (Usuario)
+        super().__init__(id_usuario, nombre, apellido, email, contrasena, rol="restaurador_jefe")
 
-    def consultar_historial(self, obra):
-        historial = sorted(obra.restauraciones, key=lambda item: item.fecha_inicio)
-        return historial
+        # Lista con todas las restauraciones que ha gestionado
+        self.restauraciones = []
 
-    def revisar_restauraciones_programadas(self, obras, fecha_actual):
-        pendientes = []
-        for obra in obras:
-            if obra.necesita_restauracion() or obra.necesita_restauracion_programada(fecha_actual):
-                pendientes.append(obra)
-        return pendientes
+    #- propiedades ───────────────────────────────────
+    @property
+    def id_usuario(self):
+        return self._id_usuario
+    
+    @property
+    def nombre(self):
+        return self._nombre
+    
+    @property
+    def apellido(self):
+        return self._apellido
+    
+    @property
+    def email(self):
+        return self._email
+    
+    @property
+    def contrasena(self):
+        return self._contrasena
+    
+    # - metodos ───────────────────────────────────
 
-    def ver_catalogo(self, catalogo):
-        return catalogo.listar_obras()
+    def iniciar_restauracion(self, restauracion):
+        # Cambiamos el estado de la obra
+        restauracion.obra.estado = "en restauracion"
+
+        # Iniciamos la restauración
+        restauracion.iniciar_restauracion()
+
+        # La guardamos en nuestro historial
+        self.restauraciones.append(restauracion)
+
+        print(f"Restauración de '{restauracion.obra.titulo}' iniciada correctamente.")
+
+
+    def finalizar_restauracion(self, restauracion):
+        # Cambiamos el estado de la obra
+        restauracion.obra.estado = "restaurada"
+
+        # Finalizamos la restauración
+        restauracion.finalizar_restauracion()
+
+        print(f"Restauración de '{restauracion.obra.titulo}' finalizada correctamente.")
+    
+    def consultar_historial_restauraciones(self):
+        print(f"Historial de restauraciones gestionadas por {self.nombre} {self.apellido}:")
+        for restauracion in self.restauraciones:
+            print(f"  - Obra: {restauracion.obra.titulo} | Estado: {restauracion.obra.estado} | Fecha de inicio: {restauracion.fecha_inicio} | Fecha de finalización: {restauracion.fecha_finalizacion}")
+    
+    #- representaciones ───────────────────────────────────
+    def __str__(self):
+        return f"Restaurador Jefe: {self.nombre} {self.apellido} (ID: {self.id_usuario})"
+    
+    def __repr__(self):
+        return f"RestauradorJefe(id_usuario={self.id_usuario}, nombre='{self.nombre}', apellido='{self.apellido}', email='{self.email}')"
+    
+    
     
