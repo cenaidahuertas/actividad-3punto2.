@@ -16,18 +16,8 @@ class ObraArte:
         return (date.today() - self.fecha_entrada).days > 5 * 365
 
 
-class Cuadro(ObraArte):
-    def __init__(self, *args, tecnica, estilo):
-        super().__init__(*args)
-        self.tecnica = tecnica
-        self.estilo = estilo
 
 
-class Escultura(ObraArte):
-    def __init__(self, *args, material, estilo):
-        super().__init__(*args)
-        self.material = material
-        self.estilo = estilo
 
 
 class Objeto(ObraArte):
