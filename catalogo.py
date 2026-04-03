@@ -1,4 +1,6 @@
 
+from obra_arte import ObraArte
+
 class Catalogo:
     def __init__(self, id, nombre) -> None:
         self.id = id
@@ -38,12 +40,12 @@ class Catalogo:
         else:
             raise ValueError("Solo se pueden registrar objetos de tipo ObraArte.")
     
-    def buscar_obra (self, id_obra):
-        for obra in self.obras:
-            if obra.id_obra == id_obra:
-                return obra
-        return None  # Si no se encuentra la obra, devuelve None    
-    
+def buscar_obra (self, id_obra):
+    for obra in self.obras:
+        if obra.id_obra == id_obra:
+            return obra
+    return None  # Si no se encuentra la obra, devuelve None    
+
 def listar_obras(self):
     if not self.obras:
         print(f"El catálogo '{self.nombre}' no tiene obras registradas.")
