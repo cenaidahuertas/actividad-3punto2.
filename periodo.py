@@ -9,4 +9,3 @@ class Periodo(Enum):
     IMPRESIONISMO = "Impresionismo"
     MODERNO_CONTEMPORANEO = "Moderno-Contemporáneo"
     
-"

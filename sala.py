@@ -4,12 +4,10 @@ class Sala:
     def __init__(
             self,
             nombre,
-            ubicacion): -> None:
-    
-            self.nombre = nombre
-            self.ubicacion = ubicacion
-    
-     # Lista de obras que están en esta sala
+            ubicacion) -> None:
+        self.nombre = nombre
+        self.ubicacion = ubicacion
+        # Lista de obras que están en esta sala
         self.obras = []
 
 # - propiedades -──────────────────────────────────
