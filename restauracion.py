@@ -1,16 +1,10 @@
-from datetime import date
-
 class Restauracion:
-    def __init__(self, obra, tipo):
-        self.obra = obra
+    def __init__(self, id, tipo, fecha_inicio, motivo):
+        self.id = id
         self.tipo = tipo
-        self.fecha_inicio = date.today()
+        self.fecha_inicio = fecha_inicio
+        self.motivo = motivo
         self.fecha_fin = None
 
-    def iniciar(self):
-        self.obra.estado = "EN_RESTAURACION"
-        self.obra.restauraciones.append(self)
-
-    def finalizar(self):
-        self.fecha_fin = date.today()
-        self.obra.estado = "EXHIBIDA"
+    def finalizar(self, fecha_fin):
+        self.fecha_fin = fecha_fin
