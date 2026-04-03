@@ -31,6 +31,8 @@ class EncargadoCatalogo(Usuario):
             raise ValueError("El catálogo debe ser una instancia de Catalogo.")
         
     
+    #--- métodos ───────────────────────────────────
+    
     # Registrar una obra nueva en el catálogo ───────────────────────────────────
     
     def registrar_obra(self, obra):
