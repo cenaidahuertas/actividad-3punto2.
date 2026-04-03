@@ -28,8 +28,8 @@ def crear_datos_iniciales():
         autor="Leonardo da Vinci",
         periodo="Renacimiento",
         valor_economico=850000000,
-        fecha_creacion=date(1503, 10, 1),
-        fecha_entrada=date(2020, 1, 1),
+        fecha_creacion="1503-10-01",
+        fecha_entrada="2020-01-01",
         descripcion="Retrato de Lisa Gherardini, esposa de un comerciante florentino.",
         estado="en exhibición",
         tecnica="Óleo sobre tabla",
@@ -43,11 +43,11 @@ def crear_datos_iniciales():
         autor="Auguste Rodin",
         periodo="Modernismo",
         valor_economico=12000000,
-        fecha_creacion=date(1902, 1, 1),
-        fecha_entrada=date(2021, 6, 15),
+        fecha_creacion="1503-10-01",
+        fecha_entrada="2020-01-01",
         descripcion="Escultura de un hombre sentado en profunda reflexión.",
         estado="en exhibición",
-        tecnica="Bronce",
+        material="Bronce",
         estilo="Modernista",
     )
 
@@ -58,8 +58,8 @@ def crear_datos_iniciales():
         autor="Desconocido",
         periodo="Antiguo",
         valor_economico=5000,
-        fecha_creacion=date(1800, 1, 1),
-        fecha_entrada=date(2022, 3, 10),
+        fecha_creacion="1503-10-01",
+        fecha_entrada="2020-01-01",
         descripcion="Reloj de sol antiguo utilizado para medir el tiempo mediante la posición del sol.",
         estado="deteriorada",
     )
@@ -96,9 +96,12 @@ def mostrar_detalle_obra(obra):
     print(f"Fecha de entrada al museo: {obra.fecha_entrada}")
     print(f"Descripción: {obra.descripcion}")
     print(f"Estado: {obra.estado}")
-    if isinstance(obra, Cuadro) or isinstance(obra, Escultura):
+    if isinstance(obra, Cuadro):
         print(f"Técnica: {obra.tecnica}")
         print(f"Estilo: {obra.estilo}")
+        elif isinstance(obra, Escultura):
+    print(f"Material: {obra.material}")
+    print(f"Estilo: {obra.estilo}")
 
 # Pausar y esperar que el usuario presione Enter
 def pausar():
@@ -119,14 +122,14 @@ def crear_usuario():
     rol = input("Ingrese el número correspondiente a su rol: ")
 
     if rol == "1":
-        return Director(nombre, apellido, email, contraseña)
+        return Director(1, nombre, apellido, email, contraseña, "director")
     elif rol == "2":
-        return RestauradorJefe(nombre, apellido, email, contraseña)
+        return RestauradorJefe(2, nombre, apellido, email, contraseña, "restaurador_jefe")
     elif rol == "3":
-        return Visitante(nombre, apellido, email, contraseña)
+        return Visitante(3, nombre, apellido, email, contraseña, "visitante")
     else:
         print("Rol no reconocido. Creando un usuario genérico.")
-        return Usuario(nombre, apellido, email, contraseña)
+        return Usuario(4, nombre, apellido, email, contraseña, "visitante")
 
 # Autenticar usuario
 def autenticar_usuario(email, contraseña, usuarios):
@@ -156,7 +159,7 @@ def menu_director(usuario, museo, catalogo):
             pausar()
         
         elif opcion == "2":
-            total = usuario.calcular_valor_total()
+            total = usuario.calcular_valor()
             print(f"Valor total de obras en cesion: COP {total:,}")
             pausar()
         
@@ -178,15 +181,14 @@ def menu_director(usuario, museo, catalogo):
                     else:
                         obras = catalogo.obras[posicion]
                         cesion = Cesion(
-                            obras=obras,
-                            museo=museo.nombre,
+                            obra=obras,
+                            museo=museo,
                             fecha_inicio=date.today(),
                             fecha_fin=date(2026, 12, 31),
                             importe=5000000
                         )
-                        usuario.gestionar_cesion(cesion)
-                        cesion.solicitar_cesion()
-                pausar()
+                        usuario.gestionar_cesiones(cesion)
+                        cesion.iniciar_cesion()
 
         elif opcion == "4":
             usuario.ver_cesiones_activas()

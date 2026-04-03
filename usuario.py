@@ -80,10 +80,10 @@ def rol(self):
     return self._rol
 @rol.setter
 def rol(self, nuevo_rol):
-    if nuevo_rol in ["director", "encargado_catalogo", "visitante"]:
+   if nuevo_rol in ["director", "encargado_catalogo", "visitante", "restaurador_jefe"]:
         self._rol = nuevo_rol
     else:
-        raise ValueError("El rol debe ser 'director', 'encargado_catalogo' o 'visitante'.")
+        raise ValueError("El rol debe ser 'director', 'encargado_catalogo', 'visitante' o 'restaurador_jefe'.")
     
 
 

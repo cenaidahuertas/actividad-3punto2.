@@ -31,8 +31,8 @@ class Escultura(ObraArte):
     )
 
         # Atributos propios de Escultura
-        self.material = material  # Ejemplo: "mármol", "bronce", "madera"
-        self.estilo = estilo      # Ejemplo: "realista", "abstracto", "clásico"
+        self.material="Bronce"  
+        self.estilo="Modernista"    
     
     # ── representación ───────────────────────────────────
     def __str__(self):
