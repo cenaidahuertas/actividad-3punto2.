@@ -1,67 +1,73 @@
+
+
 class Usuario:
-    def __init__(self, id, nombre, rol, clave):
-        self.id = id
+    def __init__(self, id_usuario, nombre, apellido, email, contrasena, rol):
+        self.id_usuario = id_usuario
         self.nombre = nombre
+        self.apellido = apellido
+        self.email = email
+        self._contrasena = contrasena
         self.rol = rol
-        self.clave = clave
 
-    def autenticar(self, clave):
-        return self.clave == clave
+    @property
+    def id_usuario(self):
+        return self._id_usuario
 
-    def mostrar_datos(self):
-        return f"Usuario: {self.nombre} | Rol: {self.rol}"
+    @id_usuario.setter
+    def id_usuario(self, nuevo_id):
+        if isinstance(nuevo_id, int) and nuevo_id > 0:
+            self._id_usuario = nuevo_id
+        else:
+            raise ValueError("El ID de usuario debe ser un entero positivo.")
 
+    @property
+    def nombre(self):
+        return self._nombre
 
-class Director(Usuario):
-    def __init__(self, id, nombre, clave):
-        super().__init__(id, nombre, "director", clave)
+    @nombre.setter
+    def nombre(self, nuevo_nombre):
+        if isinstance(nuevo_nombre, str) and nuevo_nombre.strip():
+            self._nombre = nuevo_nombre.strip()
+        else:
+            raise ValueError("El nombre debe ser una cadena no vacía.")
 
-    def calcular_valor_total(self, obras):
-        total = 0
-        for obra in obras:
-            total += obra.valor_economico
-        return total
+    @property
+    def apellido(self):
+        return self._apellido
 
-    def gestionar_cesion(self, museo, cesion):
-        museo.registrar_cesion(cesion)
-        cesion.iniciar_cesion()
+    @apellido.setter
+    def apellido(self, nuevo_apellido):
+        if isinstance(nuevo_apellido, str) and nuevo_apellido.strip():
+            self._apellido = nuevo_apellido.strip()
+        else:
+            raise ValueError("El apellido debe ser una cadena no vacía.")
 
-    def ver_catalogo(self, catalogo):
-        return catalogo.listar_obras()
+    @property
+    def email(self):
+        return self._email
 
+    @email.setter
+    def email(self, nuevo_email):
+        if isinstance(nuevo_email, str) and "@" in nuevo_email:
+            self._email = nuevo_email.strip()
+        else:
+            raise ValueError("El email debe contener '@'.")
 
-class RestauradorJefe(Usuario):
-    def __init__(self, id, nombre, clave):
-        super().__init__(id, nombre, "restaurador jefe", clave)
+    @property
+    def rol(self):
+        return self._rol
 
-    def iniciar_restauracion(self, obra, restauracion):
-        obra.enviar_a_restauracion(restauracion)
+    @rol.setter
+    def rol(self, nuevo_rol):
+        roles_validos = ["director", "encargado_catalogo", "visitante", "restaurador_jefe"]
+        if nuevo_rol in roles_validos:
+            self._rol = nuevo_rol
+        else:
+            raise ValueError(f"El rol debe ser uno de: {roles_validos}")
 
-    def finalizar_restauracion(self, obra, fecha_fin):
-        if obra.restauraciones:
-            obra.restauraciones[-1].finalizar(fecha_fin)
-            obra.finalizar_restauracion(fecha_fin)
+    def autenticar(self, email, contrasena):
+        """Verifica si el email y contraseña coinciden."""
+        return self.email == email and self._contrasena == contrasena
 
-    def consultar_historial(self, obra):
-        historial = sorted(obra.restauraciones, key=lambda item: item.fecha_inicio)
-        return historial
-
-    def revisar_restauraciones_programadas(self, obras, fecha_actual):
-        pendientes = []
-        for obra in obras:
-            if obra.necesita_restauracion() or obra.necesita_restauracion_programada(fecha_actual):
-                pendientes.append(obra)
-        return pendientes
-
-    def ver_catalogo(self, catalogo):
-        return catalogo.listar_obras()
-
-class Visitante(Usuario):
-    def __init__(self, id, nombre, clave):
-        super().__init__(id, nombre, "visitante", clave)
-
-    def consultar_obras_por_sala(self, catalogo, nombre_sala):
-        return catalogo.listar_obras_por_sala(nombre_sala)
-
-    def consultar_fechas_exposicion(self, exposicion):
-        return f"Inicio: {exposicion.fecha_inicio} | Fin: {exposicion.fecha_fin}"
+    def __str__(self):
+        return f"Usuario: {self.nombre} {self.apellido} | Email: {self.email} | Rol: {self.rol}"
