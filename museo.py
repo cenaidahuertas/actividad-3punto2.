@@ -50,26 +50,25 @@ class Museo:
 
 # métodos ___________________________
 
-def recibir_obra(self, obra):
-    """ Registra una obra que llega al museo por cesión ."""
-    self.obras_recibidas.append(obra)
-    print(f"Museo '{self.nombre}' recibió la obra '{obra.titulo}' correctamente.")
+    def recibir_obra(self, obra):
+        """Registra una obra que llega al museo."""
+        self.obras_recibidas.append(obra)
 
-def devolver_obra(self, obra):
-    """ Registra la devolución de una obra al museo ."""
-    if obra in self.obras_recibidas:
-        self.obras_recibidas.remove(obra)
-        print(f"Museo '{self.nombre}' devolvió la obra '{obra.titulo}' correctamente.")
-    else:
-        print(f"La obra '{obra.titulo}' no se encuentra en el museo '{self.nombre}'.")
+    def devolver_obra(self, obra):
+        """Registra la devolución de una obra."""
+        if obra in self.obras_recibidas:
+            self.obras_recibidas.remove(obra)
+            print(f"Museo '{self.nombre}' devolvió la obra '{obra.titulo}' correctamente.")
+        else:
+            print(f"La obra '{obra.titulo}' no se encuentra en el museo '{self.nombre}'.")
 
-def solicitar_cesion(self, cesion):
-    """ Registra una solicitud de cesión por parte del museo ."""
-    self.censiones.append(cesion)
-    print(f"Museo '{self.nombre}' solicitó la cesión de la obra '{cesion.obra.titulo}' correctamente.")
+    def solicitar_cesion(self, cesion):
+        """Registra una solicitud de cesión."""
+        self.cesiones.append(cesion)
+        print(f"Museo '{self.nombre}' solicitó la cesión de '{cesion.obra.titulo}'.")
 
 # - representación del museo __________________________
 
-def __str__(self):
+    def __str__(self):
         return f"Museo: {self.nombre}, Dirección: {self.direccion}, Obras Recibidas: {len(self.obras_recibidas)}, Cesiones Solicitadas: {len(self.censiones)}"
 

@@ -14,12 +14,12 @@ from visitante import Visitante
 
 # Crear los datos iniciales del sistema
 def crear_datos_iniciales():
-    Catalogo = Catalogo(1, "Catalogo de museo")
+    catalogo = Catalogo(1, "Catalogo de museo")
 
-# crear Salas ------------
-    sala1 = Sala(1, "Sala de Pinturas")
-    sala2 = Sala(2, "Sala de Esculturas")
-    sala3 = Sala(3, "Sala de Objetos")
+    # Crear salas —------------
+    sala1 = Sala("Sala de Pinturas", "Primer piso")
+    sala2 = Sala("Sala de Esculturas", "Segundo piso")
+    sala3 = Sala("Sala de Objetos", "Tercer piso")
 
 # crear Obras -------------
     cuadro1 = Cuadro(
@@ -28,28 +28,29 @@ def crear_datos_iniciales():
         autor="Leonardo da Vinci",
         periodo="Renacimiento",
         valor_economico=850000000,
-        fecha_creacion="1503-10-01",
-        fecha_entrada="2020-01-01",
+        fecha_creacion=date(1503, 10, 1),
+        fecha_entrada=date(2020, 1, 1),
         descripcion="Retrato de Lisa Gherardini, esposa de un comerciante florentino.",
-        estado="en exhibición",
+        estado="disponible",
         tecnica="Óleo sobre tabla",
         estilo="Renacentista",
     )
 
 # crear Esculturas -------------
-    Escultura1 = Escultura(
+    escultura1 = Escultura(
         id_obra=2,
         titulo="El Pensador",
         autor="Auguste Rodin",
         periodo="Modernismo",
         valor_economico=12000000,
-        fecha_creacion="1503-10-01",
-        fecha_entrada="2020-01-01",
-        descripcion="Escultura de un hombre sentado en profunda reflexión.",
-        estado="en exhibición",
+        fecha_creacion=date(1902, 1, 1),
+        fecha_entrada=date(2021, 6, 15),
+        descripcion="Escultura de un hombre sentado en profunda reflexion.",
+        estado="disponible",
         material="Bronce",
         estilo="Modernista",
     )
+
 
 # crear Objetos -------------
     objeto1 = Objeto(
@@ -58,50 +59,41 @@ def crear_datos_iniciales():
         autor="Desconocido",
         periodo="Antiguo",
         valor_economico=5000,
-        fecha_creacion="1503-10-01",
-        fecha_entrada="2020-01-01",
+        fecha_creacion=date(1503, 10, 1),
+        fecha_entrada=date(2020, 1, 1),
         descripcion="Reloj de sol antiguo utilizado para medir el tiempo mediante la posición del sol.",
         estado="deteriorada",
     )
 
 # Registrar obras en el catálogo
-    Catalogo.registrar_obra(cuadro1)
-    Catalogo.registrar_obra(Escultura1)
-    Catalogo.registrar_obra(objeto1)
+    catalogo.registrar_obra(cuadro1)
+    catalogo.registrar_obra(escultura1)
+    catalogo.registrar_obra(objeto1)
 
 # Asignar obras a las salas
-    sala1.agregar_obra(cuadro1)
-    sala2.agregar_obra(Escultura1)
-    sala3.agregar_obra(objeto1)
+    sala1.asignar_obra(cuadro1)
+    sala2.asignar_obra(escultura1)
+    sala3.asignar_obra(objeto1)
 
 # Crear museo
-    museo = Museo(
-        id_museo=1,
-        nombre="Museo de Arte e Historia",
-        direccion="Calle Principal 123, Ciudad",
-        catalogo=Catalogo,
-        salas=[sala1, sala2, sala3]
-    )
-    return museo, Catalogo, sala1, sala2, sala3
+    museo = Museo("Museo de Arte e Historia", "Calle Principal 123, Ciudad")
+    museo.recibir_obra(cuadro1)
+    museo.recibir_obra(escultura1)
+    museo.recibir_obra(objeto1)
+    return museo, catalogo, sala1, sala2, sala3
 
 # Mostrar detalle de una obra
 
 def mostrar_detalle_obra(obra):
-    print(f"ID de la obra: {obra.id_obra}")
-    print(f"Título: {obra.titulo}")
-    print(f"Autor: {obra.autor}")
-    print(f"Periodo: {obra.periodo}")
-    print(f"Valor económico: {obra.valor_economico}")
-    print(f"Fecha de creación: {obra.fecha_creacion}")
-    print(f"Fecha de entrada al museo: {obra.fecha_entrada}")
-    print(f"Descripción: {obra.descripcion}")
-    print(f"Estado: {obra.estado}")
-    if isinstance(obra, Cuadro):
-        print(f"Técnica: {obra.tecnica}")
-        print(f"Estilo: {obra.estilo}")
-        elif isinstance(obra, Escultura):
-    print(f"Material: {obra.material}")
-    print(f"Estilo: {obra.estilo}")
+    print(f"  ID: {obra.id_obra}")
+    print(f"  Titulo: {obra.titulo}")
+    print(f"  Autor: {obra.autor}")
+    print(f"  Periodo: {obra.periodo}")
+    print(f"  Valor economico: COP {obra.valor_economico:,}")
+    print(f"  Fecha de creacion: {obra.fecha_creacion}")
+    print(f"  Fecha de entrada: {obra.fecha_entrada}")
+    print(f"  Descripcion: {obra.descripcion}")
+    
 
 # Pausar y esperar que el usuario presione Enter
 def pausar():
@@ -113,7 +105,7 @@ def crear_usuario():
     nombre = input("Ingrese su nombre: ")   
     apellido = input("Ingrese su apellido: ")
     email = input("Ingrese su correo electrónico: ")
-    contraseña = input("Ingrese su contraseña: ")
+    contrasena = input("Ingrese su contrasena: ")
 
     print("\nSeleccione su rol:")
     print("1. Director")
@@ -122,34 +114,33 @@ def crear_usuario():
     rol = input("Ingrese el número correspondiente a su rol: ")
 
     if rol == "1":
-        return Director(1, nombre, apellido, email, contraseña, "director")
+        return Director(1, nombre, apellido, email, contrasena)
     elif rol == "2":
-        return RestauradorJefe(2, nombre, apellido, email, contraseña, "restaurador_jefe")
+        return RestauradorJefe(2, nombre, apellido, email, contrasena)
     elif rol == "3":
-        return Visitante(3, nombre, apellido, email, contraseña, "visitante")
+        return Visitante(3, nombre, apellido, email, contrasena)
     else:
         print("Rol no reconocido. Creando un usuario genérico.")
-        return Usuario(4, nombre, apellido, email, contraseña, "visitante")
+        return Usuario(4, nombre, apellido, email, contrasena, "visitante")
 
 # Autenticar usuario
-def autenticar_usuario(email, contraseña, usuarios):
+def autenticar_usuario(email, contrasena, usuarios):
     for usuario in usuarios:
-        if usuario.email == email and usuario.contraseña == contraseña:
+        if usuario.email == email and usuario._contrasena == contrasena:
             print(f"Autenticación exitosa. Bienvenido, {usuario.nombre} {usuario.apellido}.")
             return usuario
-    print("Autenticación fallida. Email o contraseña incorrectos.")
+    print("Autenticación fallida. Email o contrasena incorrectos.")
     return None
 
 # Menú del Director
 def menu_director(usuario, museo, catalogo):
     while True:
-        print("\n=== MENÚ DEL DIRECTOR ===")
-        print("1. Ver catálogo de obras")
-        print("2. Agregar nueva obra")
-        print("3. Modificar obra existente")
-        print("4. Eliminar obra")
-        print("5. Ver salas del museo")
-        print("6. Salir")
+        print("=== MENU DEL DIRECTOR ===")
+        print("1. Ver catalogo de obras")
+        print("2. Ver valor total en cesion")
+        print("3. Gestionar cesion de una obra")
+        print("4. Ver cesiones activas")
+        print("0. Salir")  
         opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
@@ -159,7 +150,7 @@ def menu_director(usuario, museo, catalogo):
             pausar()
         
         elif opcion == "2":
-            total = usuario.calcular_valor()
+            total = usuario.calcular_valor_total()
             print(f"Valor total de obras en cesion: COP {total:,}")
             pausar()
         
@@ -187,14 +178,14 @@ def menu_director(usuario, museo, catalogo):
                             fecha_fin=date(2026, 12, 31),
                             importe=5000000
                         )
-                        usuario.gestionar_cesiones(cesion)
+                        usuario.gestionar_cesion(cesion)
                         cesion.iniciar_cesion()
 
         elif opcion == "4":
             usuario.ver_cesiones_activas()
             pausar()
         
-        elif opcion == "6":
+        elif opcion == "0":
             print("Saliendo del menú del Director.")
             break
 
@@ -235,11 +226,13 @@ def menu_restaurador(usuario, museo, catalogo):
             print("Obras disponibles para restauracion:")
             for i, obra in enumerate(deterioradas, start=1):
                 print(f"{i}. {obra.titulo} | Estado: {obra.estado}")
-            pausar()
             opcion_obra = input("Seleccione el número de la obra que desea restaurar: ").strip()    
             if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(deterioradas):
                 print("Opción inválida. Por favor, seleccione un número válido.")
+                pausar()
+                continue
             
+            posicion = int(opcion_obra) - 1
             obra = deterioradas[posicion]
             restauracion = Restauracion(obra=obra, tipo="limpieza", motivo="Restauracion preventiva")
             usuario.iniciar_restauracion(restauracion)
@@ -271,8 +264,8 @@ def menu_restaurador(usuario, museo, catalogo):
             # Buscamos la restauracion en el historial del restaurador
             obra = en_restauracion[posicion]
             restauracion = None
-            for r in usuario.historial_restauraciones:
-                if r.obra == obra and r.estado == "en curso":
+            for r in usuario.restauraciones:
+                if r.obra == obra and r.estado == "en proceso":
                     restauracion = r
                     break
             
@@ -294,7 +287,7 @@ def menu_restaurador(usuario, museo, catalogo):
             
 
 # Menú del Visitante
-def menu_visitante(usuario, museo, catalogo):
+def menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3):
     while True:
         print(f"\nBienvenido Visitante: {usuario.nombre} {usuario.apellido}")
         print("1. Ver obras disponibles")
@@ -306,7 +299,7 @@ def menu_visitante(usuario, museo, catalogo):
             if catalogo.obras:
                 print("Obras disponibles en el museo:")
                 for obra in catalogo.obras:
-                    print(f"  - {obra.titulo} | Estado: {obra.estado}")
+                    print(f"  - {obra.titulo}")
             else:
                 print("No hay obras disponibles en el museo.")
             pausar()
@@ -331,9 +324,14 @@ def menu_visitante(usuario, museo, catalogo):
                 continue
             obra = catalogo.obras[posicion]
             print(f"Información de la obra '{obra.titulo}':")
-            print(f"  Artista: {obra.artista}")
-            print(f"  Año: {obra.anio}")
-            print(f"  Estado: {obra.estado}")
+            print(f"  Autor: {obra.autor}")
+            print(f"  Periodo: {obra.periodo}")
+            print(f"  Año de creacion: {obra.fecha_creacion}")
+            
+            # Buscamos en qué sala está
+            for sala in [sala1, sala2, sala3]:
+                if obra in sala.obras:
+                    print(f"  Sala: {sala.nombre}")
             pausar()
 
         elif opcion == "0":
@@ -362,15 +360,15 @@ def main():
 
         elif opcion == "2":
             email = input("Ingrese su correo electrónico: ")
-            contraseña = input("Ingrese su contraseña: ")
-            usuario = autenticar_usuario(email, contraseña, usuarios)
+            contrasena = input("Ingrese su contrasena: ")
+            usuario = autenticar_usuario(email, contrasena, usuarios)
             if usuario:
                 if isinstance(usuario, Director):
                     menu_director(usuario, museo, catalogo)
                 elif isinstance(usuario, RestauradorJefe):
                     menu_restaurador(usuario, museo, catalogo)
                 elif isinstance(usuario, Visitante):
-                    menu_visitante(usuario, museo, catalogo)
+                    menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3)
                 else:
                     print("Rol de usuario no reconocido. No se puede acceder al menú.")
                     pausar()
@@ -383,5 +381,5 @@ def main():
                 print("Opción no válida. Por favor, seleccione una opción del menú.")
                 pausar()
     
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main()

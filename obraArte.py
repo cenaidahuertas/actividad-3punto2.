@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import date
 
 class ObraArte(ABC):
     def __init__(
@@ -82,20 +83,20 @@ class ObraArte(ABC):
         return self._fecha_creacion
     @fecha_creacion.setter
     def fecha_creacion(self, nueva_fecha):      
-        if isinstance(nueva_fecha, str) and nueva_fecha.strip():
-            self._fecha_creacion = nueva_fecha.strip()
+        if isinstance(nueva_fecha, date):
+            self._fecha_creacion = nueva_fecha
         else:
-            raise ValueError("La fecha de creación debe ser una cadena de texto no vacía.")
+            raise ValueError("La fecha de creación debe ser un objeto date.")
     
     @property
     def fecha_entrada(self):
         return self._fecha_entrada  
     @fecha_entrada.setter
-    def fecha_entrada(self, nueva_fecha):   
-        if isinstance(nueva_fecha, str) and nueva_fecha.strip():
-            self._fecha_entrada = nueva_fecha.strip()
+    def fecha_entrada(self, nueva_fecha):
+        if isinstance(nueva_fecha, date):
+            self._fecha_entrada = nueva_fecha
         else:
-            raise ValueError("La fecha de entrada debe ser una cadena de texto no vacía.")
+            raise ValueError("La fecha de entrada debe ser un objeto date.")
     
     @property
     def descripcion(self):

@@ -37,7 +37,7 @@ class Sala:
     def asignar_obra(self, obra):
         """Asigna una obra a esta sala."""
         self.obras.append(obra)
-        print(f"Obra '{obra.titulo}' asignada a la sala '{self.nombre}'.")
+        
     
     def retirar_obra(self, obra):
         """Retira una obra de esta sala."""

@@ -1,6 +1,6 @@
-from datetime import datetime
-
-import obraArte
+from datetime import date
+from obraArte import ObraArte
+from museo import Museo
 
 class Cesion:
     def __init__(
@@ -25,7 +25,7 @@ class Cesion:
         return self._obra
     @obra.setter
     def obra(self, nueva_obra):
-        if isinstance(nueva_obra, obraArte):
+        if isinstance(nueva_obra,ObraArte):
             self._obra = nueva_obra
         else:
             raise ValueError("La cesión debe estar asociada a una obra de arte válida.")
@@ -45,20 +45,20 @@ class Cesion:
         return self._fecha_inicio
     @fecha_inicio.setter
     def fecha_inicio(self, nueva_fecha_inicio):
-        if isinstance(nueva_fecha_inicio, datetime):
+        if isinstance(nueva_fecha_inicio, date):
             self._fecha_inicio = nueva_fecha_inicio
         else:
-            raise ValueError("La fecha de inicio debe ser un objeto datetime válido.")
+            raise ValueError("La fecha de inicio debe ser un objeto date.")
     
     @property
     def fecha_fin(self):
         return self._fecha_fin
     @fecha_fin.setter
     def fecha_fin(self, nueva_fecha_fin):
-        if isinstance(nueva_fecha_fin, datetime):
+        if isinstance(nueva_fecha_fin, date):
             self._fecha_fin = nueva_fecha_fin
         else:
-            raise ValueError("La fecha de fin debe ser un objeto datetime válido.")
+            raise ValueError("La fecha de fin debe ser un objeto date.")
     
     @property
     def importe(self):
@@ -93,4 +93,4 @@ def __str__(self):
             f"Desde: {self.fecha_inicio} hasta: {self.fecha_fin} | "
             f"Importe: ${self.importe} | "
             f"Estado: {self.estado}"
-        ) 
+        )
