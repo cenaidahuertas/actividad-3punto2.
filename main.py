@@ -1,3 +1,4 @@
+
 from datetime import date
 from catalogo import Catalogo
 from cesion import Cesion
@@ -17,12 +18,12 @@ from encargadoCatalogo import EncargadoCatalogo
 def crear_datos_iniciales():
     catalogo = Catalogo(1, "Catalogo de museo")
 
-    # Crear salas —------------
+    # Crear salas
     sala1 = Sala("Sala de Pinturas", "Primer piso")
     sala2 = Sala("Sala de Esculturas", "Segundo piso")
     sala3 = Sala("Sala de Objetos", "Tercer piso")
 
-# crear Obras -------------
+    # Crear Obras
     cuadro1 = Cuadro(
         id_obra=1,
         titulo="La Mona Lisa",
@@ -37,7 +38,7 @@ def crear_datos_iniciales():
         estilo="Renacentista",
     )
 
-# crear Esculturas -------------
+    # Crear Esculturas
     escultura1 = Escultura(
         id_obra=2,
         titulo="El Pensador",
@@ -52,8 +53,7 @@ def crear_datos_iniciales():
         estilo="Modernista",
     )
 
-
-# crear Objetos -------------
+    # Crear Objetos
     objeto1 = Objeto(
         id_obra=3,
         titulo="Reloj de Sol",
@@ -66,25 +66,25 @@ def crear_datos_iniciales():
         estado="deteriorada",
     )
 
-# Registrar obras en el catálogo
+    # Registrar obras en el catálogo
     catalogo.registrar_obra(cuadro1)
     catalogo.registrar_obra(escultura1)
     catalogo.registrar_obra(objeto1)
 
-# Asignar obras a las salas
+    # Asignar obras a las salas
     sala1.asignar_obra(cuadro1)
     sala2.asignar_obra(escultura1)
     sala3.asignar_obra(objeto1)
 
-# Crear museo
+    # Crear museo
     museo = Museo("Museo de Arte e Historia", "Calle Principal 123, Ciudad")
     museo.recibir_obra(cuadro1)
     museo.recibir_obra(escultura1)
     museo.recibir_obra(objeto1)
     return museo, catalogo, sala1, sala2, sala3
 
-# Mostrar detalle de una obra
 
+# Mostrar detalle de una obra
 def mostrar_detalle_obra(obra):
     print(f"  ID: {obra.id_obra}")
     print(f"  Titulo: {obra.titulo}")
@@ -94,26 +94,27 @@ def mostrar_detalle_obra(obra):
     print(f"  Fecha de creacion: {obra.fecha_creacion}")
     print(f"  Fecha de entrada: {obra.fecha_entrada}")
     print(f"  Descripcion: {obra.descripcion}")
-    
+
 
 # Pausar y esperar que el usuario presione Enter
 def pausar():
     input("Presione Enter para continuar...")
 
+
 # Crear usuario según el rol elegido
-def crear_usuario():
+def crear_usuario(catalogo):
     print("\n=== REGISTRO DEL USUARIO ===")
-    nombre = input("Ingrese su nombre: ").strip()
-    apellido = input("Ingrese su apellido: ").strip()
-    email = input("Ingrese su correo electronico: ").strip()
-    contrasena = input("Ingrese su contrasena: ").strip()
+    nombre = input("Ingrese su nombre: ")
+    apellido = input("Ingrese su apellido: ")
+    email = input("Ingrese su correo electrónico: ")
+    contrasena = input("Ingrese su contrasena: ")
 
     print("\nSeleccione su rol:")
     print("1. Director")
     print("2. Restaurador Jefe")
     print("3. Visitante")
     print("4. Encargado de Catalogo")
-    rol = input("Ingrese el numero de su rol: ").strip()
+    rol = input("Ingrese el número correspondiente a su rol: ")
 
     if rol == "1":
         return Director(1, nombre, apellido, email, contrasena)
@@ -122,10 +123,11 @@ def crear_usuario():
     elif rol == "3":
         return Visitante(3, nombre, apellido, email, contrasena)
     elif rol == "4":
-        return EncargadoCatalogo(4, nombre, apellido, email, contrasena,)
+        return EncargadoCatalogo(4, nombre, apellido, email, contrasena, catalogo)
     else:
-        return Visitante(3, nombre, apellido, email, contrasena)
-    
+        print("Rol no reconocido. Creando un usuario genérico.")
+        return Usuario(4, nombre, apellido, email, contrasena, "visitante")
+
 
 # Autenticar usuario
 def autenticar_usuario(email, contrasena, usuarios):
@@ -136,15 +138,16 @@ def autenticar_usuario(email, contrasena, usuarios):
     print("Autenticación fallida. Email o contrasena incorrectos.")
     return None
 
+
 # Menú del Director
 def menu_director(usuario, museo, catalogo):
     while True:
-        print("=== MENU DEL DIRECTOR ===")
+        print("\n=== MENU DEL DIRECTOR ===")
         print("1. Ver catalogo de obras")
         print("2. Ver valor total en cesion")
         print("3. Gestionar cesion de una obra")
         print("4. Ver cesiones activas")
-        print("0. Salir")  
+        print("0. Salir")
         opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
@@ -152,17 +155,17 @@ def menu_director(usuario, museo, catalogo):
             for obra in catalogo.obras:
                 print(f"ID: {obra.id_obra} - Título: {obra.titulo} - Autor: {obra.autor}")
             pausar()
-        
+
         elif opcion == "2":
             total = usuario.calcular_valor_total()
             print(f"Valor total de obras en cesion: COP {total:,}")
             pausar()
-        
+
         elif opcion == "3":
             if not catalogo.obras:
                 print("No hay obras disponibles para ceder en el catálogo.")
             else:
-                print("\n=== obra disponibles ===")
+                print("\n=== Obras disponibles ===")
                 for i, obra in enumerate(catalogo.obras, start=1):
                     print(f"{i}. {obra.titulo} | Estado: {obra.estado}")
 
@@ -171,24 +174,21 @@ def menu_director(usuario, museo, catalogo):
                     print("Opción inválida. Por favor, seleccione un número válido.")
                 else:
                     posicion = int(opcion_obra) - 1
-                    if posicion < 0 or posicion >= len(catalogo.obras):
-                        print("Posición inválida. Por favor, seleccione un número válido.")
-                    else:
-                        obras = catalogo.obras[posicion]
-                        cesion = Cesion(
-                            obra=obras,
-                            museo=museo,
-                            fecha_inicio=date.today(),
-                            fecha_fin=date(2026, 12, 31),
-                            importe=5000000
-                        )
-                        usuario.gestionar_cesion(cesion)
-                        cesion.iniciar_cesion()
+                    obras = catalogo.obras[posicion]
+                    cesion = Cesion(
+                        obra=obras,
+                        museo=museo,
+                        fecha_inicio=date.today(),
+                        fecha_fin=date(2026, 12, 31),
+                        importe=5000000
+                    )
+                    usuario.gestionar_cesion(cesion)
+                    cesion.iniciar_cesion()
 
         elif opcion == "4":
             usuario.ver_cesiones_activas()
             pausar()
-        
+
         elif opcion == "0":
             print("Saliendo del menú del Director.")
             break
@@ -210,7 +210,6 @@ def menu_restaurador(usuario, museo, catalogo):
         opcion = input("Opcion: ").strip()
 
         if opcion == "1":
-            # Buscamos obras deterioradas
             deterioradas = [o for o in catalogo.obras if o.estado == "deteriorada"]
             if deterioradas:
                 print("Obras que necesitan restauracion:")
@@ -219,7 +218,6 @@ def menu_restaurador(usuario, museo, catalogo):
             else:
                 print("No hay obras que necesiten restauracion.")
             pausar()
-
 
         elif opcion == "2":
             deterioradas = [o for o in catalogo.obras if o.estado == "deteriorada"]
@@ -230,12 +228,12 @@ def menu_restaurador(usuario, museo, catalogo):
             print("Obras disponibles para restauracion:")
             for i, obra in enumerate(deterioradas, start=1):
                 print(f"{i}. {obra.titulo} | Estado: {obra.estado}")
-            opcion_obra = input("Seleccione el número de la obra que desea restaurar: ").strip()    
+            opcion_obra = input("Seleccione el número de la obra que desea restaurar: ").strip()
             if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(deterioradas):
                 print("Opción inválida. Por favor, seleccione un número válido.")
                 pausar()
                 continue
-            
+
             posicion = int(opcion_obra) - 1
             obra = deterioradas[posicion]
             restauracion = Restauracion(obra=obra, tipo="limpieza", motivo="Restauracion preventiva")
@@ -243,7 +241,6 @@ def menu_restaurador(usuario, museo, catalogo):
             pausar()
 
         elif opcion == "3":
-            # Buscamos obras en restauracion
             en_restauracion = [o for o in catalogo.obras if o.estado == "en restauracion"]
             if not en_restauracion:
                 print("No hay obras en restauracion.")
@@ -252,7 +249,7 @@ def menu_restaurador(usuario, museo, catalogo):
             print("Obras en restauracion:")
             for i, obra in enumerate(en_restauracion, start=1):
                 print(f"{i}. {obra.titulo} | Estado: {obra.estado}")
-            
+
             opcion_obra = input("Seleccione el número de la obra que desea finalizar restauracion: ").strip()
             if not opcion_obra.isdigit():
                 print("Opción inválida. Por favor, seleccione un número válido.")
@@ -265,15 +262,14 @@ def menu_restaurador(usuario, museo, catalogo):
                 pausar()
                 continue
 
-            # Buscamos la restauracion en el historial del restaurador
             obra = en_restauracion[posicion]
             restauracion = None
             for r in usuario.restauraciones:
                 if r.obra == obra and r.estado == "en proceso":
                     restauracion = r
                     break
-            
-            if restauracion: 
+
+            if restauracion:
                 usuario.finalizar_restauracion(restauracion)
             else:
                 print("No se encontró una restauración en curso para la obra seleccionada.")
@@ -282,23 +278,24 @@ def menu_restaurador(usuario, museo, catalogo):
         elif opcion == "4":
             usuario.consultar_historial()
             pausar()
+
         elif opcion == "0":
             print("Saliendo del menú del Restaurador Jefe.")
             break
+
         else:
             print("Opción no válida. Por favor, seleccione una opción del menú.")
             pausar()
-            
+
 
 # Menú del Encargado de Catálogo
-def menu_encargado(usuario, catalogo, sala1, sala2, sala3):
+def menu_encargado(usuario, catalogo):
     while True:
-        print(f"\n=== MENU DEL ENCARGADO DE CATALOGO: {usuario.nombre} {usuario.apellido} ===")
-        print("1. Ver catalogo")
-        print("2. Registrar obra")
-        print("3. Eliminar obra")
-        print("4. Clasificar obra")
-        print("5. Asignar obra a sala")
+        print(f"\nBienvenido Encargado: {usuario.nombre} {usuario.apellido}")
+        print("1. Listar obras del catálogo")
+        print("2. Registrar nueva obra")
+        print("3. Editar obra")
+        print("4. Eliminar obra")
         print("0. Salir")
         opcion = input("Opcion: ").strip()
 
@@ -307,76 +304,76 @@ def menu_encargado(usuario, catalogo, sala1, sala2, sala3):
             pausar()
 
         elif opcion == "2":
-            print("Funcion de registrar obra proximamente.")
+            print("Ingrese los datos de la nueva obra:")
+            titulo = input("Título: ")
+            autor = input("Autor: ")
+            periodo = input("Período: ")
+            descripcion = input("Descripción: ")
+            nueva_obra = Cuadro(
+                id_obra=len(catalogo.obras) + 1,
+                titulo=titulo,
+                autor=autor,
+                periodo=periodo,
+                valor_economico=0,
+                fecha_creacion=date.today(),
+                fecha_entrada=date.today(),
+                descripcion=descripcion,
+                estado="disponible",
+                tecnica="No especificada",
+                estilo="No especificado"
+            )
+            usuario.registrar_obra(nueva_obra)
             pausar()
 
         elif opcion == "3":
             if not catalogo.obras:
-                print("No hay obras en el catalogo.")
+                print("No hay obras para editar.")
                 pausar()
                 continue
             for i, obra in enumerate(catalogo.obras, start=1):
                 print(f"{i}. {obra.titulo}")
-            opcion_obra = input("Seleccione el numero de la obra a eliminar: ").strip()
+            opcion_obra = input("Seleccione el número de la obra a editar: ").strip()
             if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(catalogo.obras):
-                print("Opcion invalida.")
+                print("Opción inválida.")
                 pausar()
                 continue
             obra = catalogo.obras[int(opcion_obra) - 1]
-            usuario.eliminar_obra(obra.id_obra)
+            titulo = input(f"Nuevo título (actual: {obra.titulo}, Enter para no cambiar): ").strip()
+            autor = input(f"Nuevo autor (actual: {obra.autor}, Enter para no cambiar): ").strip()
+            estado = input(f"Nuevo estado (actual: {obra.estado}, Enter para no cambiar): ").strip()
+            usuario.editar_obra(
+                obra.id_obra,
+                titulo=titulo if titulo else None,
+                autor=autor if autor else None,
+                estado=estado if estado else None
+            )
             pausar()
 
         elif opcion == "4":
             if not catalogo.obras:
-                print("No hay obras en el catalogo.")
-                pausar()
-                continue
-            for i, obra in enumerate(catalogo.obras, start=1):
-                print(f"{i}. {obra.titulo} | Periodo actual: {obra.periodo}")
-            opcion_obra = input("Seleccione el numero de la obra: ").strip()
-            if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(catalogo.obras):
-                print("Opcion invalida.")
-                pausar()
-                continue
-            obra = catalogo.obras[int(opcion_obra) - 1]
-            nuevo_periodo = input("Ingrese el nuevo periodo: ").strip()
-            usuario.clasificar_obra(obra.id_obra, nuevo_periodo)
-            pausar()
-
-        elif opcion == "5":
-            if not catalogo.obras:
-                print("No hay obras en el catalogo.")
+                print("No hay obras para eliminar.")
                 pausar()
                 continue
             for i, obra in enumerate(catalogo.obras, start=1):
                 print(f"{i}. {obra.titulo}")
-            opcion_obra = input("Seleccione el numero de la obra: ").strip()
+            opcion_obra = input("Seleccione el número de la obra a eliminar: ").strip()
             if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(catalogo.obras):
-                print("Opcion invalida.")
+                print("Opción inválida.")
                 pausar()
                 continue
             obra = catalogo.obras[int(opcion_obra) - 1]
-            print(f"1. {sala1.nombre}")
-            print(f"2. {sala2.nombre}")
-            print(f"3. {sala3.nombre}")
-            opcion_sala = input("Seleccione la sala: ").strip()
-            if opcion_sala == "1":
-                usuario.asignar_sala(obra.id_obra, sala1)
-            elif opcion_sala == "2":
-                usuario.asignar_sala(obra.id_obra, sala2)
-            elif opcion_sala == "3":
-                usuario.asignar_sala(obra.id_obra, sala3)
-            else:
-                print("Opcion invalida.")
+            catalogo.obras.remove(obra)
+            print(f"Obra '{obra.titulo}' eliminada correctamente.")
             pausar()
 
         elif opcion == "0":
-            print("Saliendo del menu del Encargado.")
+            print("Saliendo del menú del Encargado de Catálogo.")
             break
 
         else:
-            print("Opcion no valida.")
+            print("Opción no válida.")
             pausar()
+
 
 # Menú del Visitante
 def menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3):
@@ -419,8 +416,7 @@ def menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3):
             print(f"  Autor: {obra.autor}")
             print(f"  Periodo: {obra.periodo}")
             print(f"  Año de creacion: {obra.fecha_creacion}")
-            
-            # Buscamos en qué sala está
+
             for sala in [sala1, sala2, sala3]:
                 if obra in sala.obras:
                     print(f"  Sala: {sala.nombre}")
@@ -429,9 +425,11 @@ def menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3):
         elif opcion == "0":
             print("Saliendo del menú del Visitante.")
             break
+
         else:
             print("Opción no válida. Por favor, seleccione una opción del menú.")
             pausar()
+
 
 # Función principal
 def main():
@@ -445,7 +443,7 @@ def main():
         opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
-            usuario = crear_usuario()
+            usuario = crear_usuario(catalogo)
             usuarios.append(usuario)
             print(f"Usuario '{usuario.nombre} {usuario.apellido}' registrado exitosamente.")
             pausar()
@@ -459,21 +457,22 @@ def main():
                     menu_director(usuario, museo, catalogo)
                 elif isinstance(usuario, RestauradorJefe):
                     menu_restaurador(usuario, museo, catalogo)
+                elif isinstance(usuario, EncargadoCatalogo):
+                    menu_encargado(usuario, catalogo)
                 elif isinstance(usuario, Visitante):
                     menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3)
-                elif isinstance(usuario, EncargadoCatalogo):
-                    menu_encargado(usuario, catalogo, sala1, sala2, sala3)
                 else:
                     print("Rol de usuario no reconocido. No se puede acceder al menú.")
                     pausar()
 
-            elif opcion == "0":
-                print("Saliendo del sistema de gestión de museo. ¡Hasta luego!")
-                break
-    
-            else:
-                print("Opción no válida. Por favor, seleccione una opción del menú.")
-                pausar()
-    
+        elif opcion == "0":
+            print("Saliendo del sistema de gestión de museo. ¡Hasta luego!")
+            break
+
+        else:
+            print("Opción no válida. Por favor, seleccione una opción del menú.")
+            pausar()
+
+
 if __name__ == "__main__":
     main()
