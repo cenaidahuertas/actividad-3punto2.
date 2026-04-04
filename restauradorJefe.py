@@ -1,7 +1,4 @@
-"""
-Módulo: restauradorJefe.py
-Representa al Restaurador Jefe del museo.
-"""
+
 
 from usuario import Usuario
 

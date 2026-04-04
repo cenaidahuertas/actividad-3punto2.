@@ -1,7 +1,4 @@
-"""
-Módulo: director.py
-Representa al Director del museo.
-"""
+
 
 from usuario import Usuario
 

@@ -1,7 +1,4 @@
-"""
-Módulo: objeto.py
-Representa un objeto de arte genérico en el museo.
-"""
+
 
 from obraArte import ObraArte
 

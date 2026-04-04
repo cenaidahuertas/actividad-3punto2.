@@ -1,7 +1,3 @@
-"""
-Módulo: visitante.py
-Representa a un visitante del museo.
-"""
 
 from usuario import Usuario
 

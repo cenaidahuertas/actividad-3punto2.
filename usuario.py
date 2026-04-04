@@ -1,7 +1,3 @@
-"""
-Módulo: usuario.py
-Clase base para todos los usuarios del sistema del museo.
-"""
 
 
 class Usuario:
