@@ -11,6 +11,7 @@ from usuario import Usuario
 from director import Director
 from restauradorJefe import RestauradorJefe
 from visitante import Visitante
+from encargadoCatalogo import EncargadoCatalogo
 
 # Crear los datos iniciales del sistema
 def crear_datos_iniciales():
@@ -102,16 +103,17 @@ def pausar():
 # Crear usuario según el rol elegido
 def crear_usuario():
     print("\n=== REGISTRO DEL USUARIO ===")
-    nombre = input("Ingrese su nombre: ")   
-    apellido = input("Ingrese su apellido: ")
-    email = input("Ingrese su correo electrónico: ")
-    contrasena = input("Ingrese su contrasena: ")
+    nombre = input("Ingrese su nombre: ").strip()
+    apellido = input("Ingrese su apellido: ").strip()
+    email = input("Ingrese su correo electronico: ").strip()
+    contrasena = input("Ingrese su contrasena: ").strip()
 
     print("\nSeleccione su rol:")
     print("1. Director")
     print("2. Restaurador Jefe")
     print("3. Visitante")
-    rol = input("Ingrese el número correspondiente a su rol: ")
+    print("4. Encargado de Catalogo")
+    rol = input("Ingrese el numero de su rol: ").strip()
 
     if rol == "1":
         return Director(1, nombre, apellido, email, contrasena)
@@ -119,9 +121,11 @@ def crear_usuario():
         return RestauradorJefe(2, nombre, apellido, email, contrasena)
     elif rol == "3":
         return Visitante(3, nombre, apellido, email, contrasena)
+    elif rol == "4":
+        return EncargadoCatalogo(4, nombre, apellido, email, contrasena,)
     else:
-        print("Rol no reconocido. Creando un usuario genérico.")
-        return Usuario(4, nombre, apellido, email, contrasena, "visitante")
+        return Visitante(3, nombre, apellido, email, contrasena)
+    
 
 # Autenticar usuario
 def autenticar_usuario(email, contrasena, usuarios):
@@ -286,6 +290,94 @@ def menu_restaurador(usuario, museo, catalogo):
             pausar()
             
 
+# Menú del Encargado de Catálogo
+def menu_encargado(usuario, catalogo, sala1, sala2, sala3):
+    while True:
+        print(f"\n=== MENU DEL ENCARGADO DE CATALOGO: {usuario.nombre} {usuario.apellido} ===")
+        print("1. Ver catalogo")
+        print("2. Registrar obra")
+        print("3. Eliminar obra")
+        print("4. Clasificar obra")
+        print("5. Asignar obra a sala")
+        print("0. Salir")
+        opcion = input("Opcion: ").strip()
+
+        if opcion == "1":
+            catalogo.listar_obras()
+            pausar()
+
+        elif opcion == "2":
+            print("Funcion de registrar obra proximamente.")
+            pausar()
+
+        elif opcion == "3":
+            if not catalogo.obras:
+                print("No hay obras en el catalogo.")
+                pausar()
+                continue
+            for i, obra in enumerate(catalogo.obras, start=1):
+                print(f"{i}. {obra.titulo}")
+            opcion_obra = input("Seleccione el numero de la obra a eliminar: ").strip()
+            if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(catalogo.obras):
+                print("Opcion invalida.")
+                pausar()
+                continue
+            obra = catalogo.obras[int(opcion_obra) - 1]
+            usuario.eliminar_obra(obra.id_obra)
+            pausar()
+
+        elif opcion == "4":
+            if not catalogo.obras:
+                print("No hay obras en el catalogo.")
+                pausar()
+                continue
+            for i, obra in enumerate(catalogo.obras, start=1):
+                print(f"{i}. {obra.titulo} | Periodo actual: {obra.periodo}")
+            opcion_obra = input("Seleccione el numero de la obra: ").strip()
+            if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(catalogo.obras):
+                print("Opcion invalida.")
+                pausar()
+                continue
+            obra = catalogo.obras[int(opcion_obra) - 1]
+            nuevo_periodo = input("Ingrese el nuevo periodo: ").strip()
+            usuario.clasificar_obra(obra.id_obra, nuevo_periodo)
+            pausar()
+
+        elif opcion == "5":
+            if not catalogo.obras:
+                print("No hay obras en el catalogo.")
+                pausar()
+                continue
+            for i, obra in enumerate(catalogo.obras, start=1):
+                print(f"{i}. {obra.titulo}")
+            opcion_obra = input("Seleccione el numero de la obra: ").strip()
+            if not opcion_obra.isdigit() or int(opcion_obra) < 1 or int(opcion_obra) > len(catalogo.obras):
+                print("Opcion invalida.")
+                pausar()
+                continue
+            obra = catalogo.obras[int(opcion_obra) - 1]
+            print(f"1. {sala1.nombre}")
+            print(f"2. {sala2.nombre}")
+            print(f"3. {sala3.nombre}")
+            opcion_sala = input("Seleccione la sala: ").strip()
+            if opcion_sala == "1":
+                usuario.asignar_sala(obra.id_obra, sala1)
+            elif opcion_sala == "2":
+                usuario.asignar_sala(obra.id_obra, sala2)
+            elif opcion_sala == "3":
+                usuario.asignar_sala(obra.id_obra, sala3)
+            else:
+                print("Opcion invalida.")
+            pausar()
+
+        elif opcion == "0":
+            print("Saliendo del menu del Encargado.")
+            break
+
+        else:
+            print("Opcion no valida.")
+            pausar()
+
 # Menú del Visitante
 def menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3):
     while True:
@@ -369,6 +461,8 @@ def main():
                     menu_restaurador(usuario, museo, catalogo)
                 elif isinstance(usuario, Visitante):
                     menu_visitante(usuario, museo, catalogo, sala1, sala2, sala3)
+                elif isinstance(usuario, EncargadoCatalogo):
+                    menu_encargado(usuario, catalogo, sala1, sala2, sala3)
                 else:
                     print("Rol de usuario no reconocido. No se puede acceder al menú.")
                     pausar()
